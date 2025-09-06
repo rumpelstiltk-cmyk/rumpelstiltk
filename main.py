@@ -18,3 +18,33 @@ def index():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
+from flask import Flask, render_template
+import requests
+
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    # 업비트 비트코인 시세 조회 예시
+    url = "https://api.upbit.com/v1/ticker?markets=KRW-BTC"
+    response = requests.get(url)
+    data = response.json()
+    
+    btc_price = data[0]['trade_price'] if data else None
+    
+    # 포트폴리오 데이터 예시
+    portfolio = {
+        "Bitcoin": 0.05,   # 보유 수량
+        "Ethereum": 0.5
+    }
+    
+    # 총 자산 계산
+    total_value = 0
+    if btc_price:
+        total_value += portfolio["Bitcoin"] * btc_price
+    # Ethereum 시세는 0으로 예시 (추후 API 추가 가능)
+    
+    return render_template("index.html", btc_price=btc_price, total_value=total_value, portfolio=portfolio)
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=10000, debug=True)
