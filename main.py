@@ -48,3 +48,11 @@ def home():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000, debug=True)
+btc_price = None
+try:
+    url = "https://api.upbit.com/v1/ticker?markets=KRW-BTC"
+    response = requests.get(url)
+    data = response.json()
+    btc_price = data[0]['trade_price'] if data else None
+except Exception as e:
+    print("업비트 API 오류:", e)
