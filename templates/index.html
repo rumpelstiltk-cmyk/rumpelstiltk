@@ -9,3 +9,24 @@
     <p>여기에 코인 포트폴리오 정보가 표시됩니다.</p>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>포트폴리오 트래커</title>
+</head>
+<body>
+    <h1>내 포트폴리오 트래커</h1>
+    
+    <h2>비트코인 현재 시세: {{ btc_price }} 원</h2>
+    
+    <h2>포트폴리오</h2>
+    <ul>
+        {% for coin, amount in portfolio.items() %}
+        <li>{{ coin }}: {{ amount }}</li>
+        {% endfor %}
+    </ul>
+    
+    <h2>총 자산(예시): {{ total_value }} 원</h2>
+</body>
+</html>
