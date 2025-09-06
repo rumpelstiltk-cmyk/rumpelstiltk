@@ -56,3 +56,29 @@ try:
     btc_price = data[0]['trade_price'] if data else None
 except Exception as e:
     print("업비트 API 오류:", e)
+from flask import Flask, render_template
+import requests
+
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    btc_price = None
+    try:
+        url = "https://api.upbit.com/v1/ticker?markets=KRW-BTC"
+        response = requests.get(url)
+        data = response.json()
+        btc_price = data[0]['trade_price'] if data else None
+    except Exception as e:
+        print("업비트 API 오류:", e)  # 서버 로그에 오류 표시
+        btc_price = None  # 오류 발생 시 None 처리
+    
+    portfolio = {"Bitcoin": 0.05, "Ethereum": 0.5}
+    total_value = 0
+    if btc_price:
+        total_value += portfolio["Bitcoin"] * btc_price
+    
+    return render_template("index.html", btc_price=btc_price, total_value=total_value, portfolio=portfolio)
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=10000, debug=True)
